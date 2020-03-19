@@ -24,4 +24,8 @@ class User(BaseModel):
     username = CharField(unique=True)
 
 
+# Create tables for  Notes/User models
+db.create_tables([Notes])
+db.create_tables([User])
+
 db.connect()
