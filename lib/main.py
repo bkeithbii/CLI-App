@@ -18,4 +18,10 @@ class Notes(BaseModel):
     date = DateField()
 
 
+# Define user model (will see if this works later)
+class User(BaseModel):
+    first_name = CharField()
+    username = CharField(unique=True)
+
+
 db.connect()
