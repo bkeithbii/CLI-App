@@ -51,5 +51,15 @@ class Member:
         else: 
             return True
 
+# Note functionality (Note class w/ functions)
+class Note: 
+    def __init__(self, title, body, member):
+        self.title = title
+        self.body = body
+        self.username = member
+
+    def make_note(self):
+        new_note = Note(title=self.title, body=self.body, date=date.now().strftime(), username=self.username)
+        new_note.save()
 
 db.connect()
