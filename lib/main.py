@@ -42,5 +42,14 @@ class Member:
             potential_username = input("Please choose a different username: ")
         return potential_username
 
+    # Only allow usernames that haven't been taken yet
+    def accessible(self, name):
+        taken = User.select().where(User.username == name)
+        if taken.exists():
+            print(f"{name} is not available")
+            return False
+        else: 
+            return True
+
 
 db.connect()
