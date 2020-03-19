@@ -30,4 +30,17 @@ db.create_tables([Notes])
 db.create_tables([User])
 
 
+# Member functionality (Member class w/ functions)
+class Member:
+    def __init__(self):
+        self.first_name = input("First Name: ")
+        self.username = 
+
+    def create_username(self):
+        potential_username = input("Create a username: ")
+        while not self.available(potential_username):
+            potential_username = input("Please choose a different username: ")
+        return potential_username
+
+
 db.connect()
