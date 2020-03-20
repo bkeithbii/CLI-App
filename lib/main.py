@@ -94,8 +94,12 @@ class Intro:
             print(f"{self.current_member.username}'s notes: ")
             notes = []
             for i, note in enumerate(self.current_member.notes):
-                notes.append({})
-
+                notes.append({note.note_id})
+                print(f"({self.length-i})Note - 
+                Title: {note.title} - 
+                Date: {note.date}\n")
+            self.select_note(notes)
+            
 
 
 
