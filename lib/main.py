@@ -1,14 +1,26 @@
 from peewee import *
 from datetime import date
+import sys
 
 db = PostgresqlDatabase(
     "notesapp", user="postgres", password="", host="localhost", port=5432
 )
 
+db.connect()
+
 # Define base model for db to be used
+
+
 class BaseModel(Model):
     class Meta:
         database = db
+
+
+# Define user model (will see if this works later)
+class Users(BaseModel):
+    first_name = CharField()
+    username = CharField(unique=True)
+    user_id = AutoField()
 
 
 # Define notes model with properties
@@ -16,20 +28,15 @@ class Notes(BaseModel):
     title = CharField(max_length=200)
     body = TextField()
     date = DateField()
-    username = ForeignKeyField(User, field="username")
+    username = ForeignKeyField(Users, backref="notes", field="username")
     note_id = AutoField()
 
 
-# Define user model (will see if this works later)
-class User(BaseModel):
-    first_name = CharField()
-    username = CharField(unique=True)
-
-
 # Create tables for  Notes/User models
-db.connect()
+db.drop_tables([Users])
+db.create_tables([Users])
+db.drop_tables([Notes])
 db.create_tables([Notes])
-db.create_tables([User])
 
 
 class Intro:
@@ -44,7 +51,7 @@ class Intro:
         )
         if select.lower() == "C":
             new_member = Member()
-            self.current_member = User(
+            self.current_member = Users(
                 first_name=new_member.first_name, username=new_member.username
             )
             self.current_member.save()
@@ -117,7 +124,7 @@ class Intro:
 
     # Check to verify member
     def get_member(self, name):
-        if member == User.get(User.username == name):
+        if member == Users.get(Users.username == name):
             return member
         else:
             print(f"Error - Member {name} doesn't exist.")
@@ -127,7 +134,8 @@ class Intro:
     def remove_member(self):
         response = input("Confirm termination of membership - Y/N:\n")
         if response.lower() == "Y" or "Yes":
-            print(f"Member {self.current_member.username} has been terminated.")
+            print(
+                f"Member {self.current_member.username} has been terminated.")
             self.current_member.delete_instance()
             self.sign_in()
         elif response.lower() == "N" or "No":
@@ -150,7 +158,7 @@ class Member:
 
     # Only allow usernames that haven't been taken yet
     def accessible(self, name):
-        taken = User.select().where(User.username == name)
+        taken = Users.select().where(Users.username == name)
         if taken.exists():
             print(f"{name} is not available")
             return False
@@ -176,4 +184,4 @@ class Note:
 
 
 intro = Intro()
-intro.sign_in
+intro.sign_in()
