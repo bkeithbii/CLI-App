@@ -57,7 +57,23 @@ class Intro:
             print("Error - Choose from the listed options")
             self.sign_in()
 
-    
+    def choices(self):
+        self.length = len(self.current_member.notes)
+        select = input(f"Welcome {self.current_member.first_name}! 
+        Pick an option:\n\t[C] - Create a note\n\t[L] - See notes library\n\t[Q] - Sign out\n\t[T] - Terminate my account\n\t[X] - Close app\n\t")
+        if select == "C":
+            self.create_note()
+        elif select == "L":
+            self.search_by_user()
+        elif select == "Q":
+            self.sign_in()
+        elif select == "T":
+            self.remove_member()
+        elif select == "X":
+            sys.exit()
+        else:
+            print("Error - Choose from the listed options")
+            self.choices()
 
 
 # Member functionality (Member class w/ functions)
