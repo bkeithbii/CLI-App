@@ -152,7 +152,7 @@ class Member:
 
     def create_username(self):
         potential_username = input("Create a username: ")
-        while not self.available(potential_username):
+        while not self.accessible(potential_username):
             potential_username = input("Please choose a different username: ")
         return potential_username
 
