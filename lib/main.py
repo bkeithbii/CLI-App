@@ -111,6 +111,15 @@ class Intro:
             print("Error - search again")
             self.select_note(notes_list)
 
+    # Check to verify user 
+    def get_member(self, name):
+        if member = User.get(User.username == name):
+            return member
+        else:
+            print(f"Error - Member {name} doesn't exist.")
+            self.sign_in()
+
+
 
 
 # Member functionality (Member class w/ functions)
