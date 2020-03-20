@@ -23,24 +23,25 @@ class Notes(BaseModel):
 # Define user model (will see if this works later)
 class User(BaseModel):
     first_name = CharField()
-    username = ForeignKeyField(unique=True)
+    username = CharField(unique=True)
 
 
 # Create tables for  Notes/User models
+db.connect()
 db.create_tables([Notes])
 db.create_tables([User])
-
 
 
 class Intro:
     def __init__(self):
         self.current_member = None
         self.length = 0
-    
+
     # Starting option to become a member and or sign in
     def sign_in(self):
         select = input(
-            "Choose a letter:\n\t[C] - Create an account\n\t[S] - Sign in\n\t[Q] - Sign out\n\t")
+            "Choose a letter:\n\t[C] - Create an account\n\t[S] - Sign in\n\t[Q] - Sign out\n\t"
+        )
         if select.lower() == "C":
             new_member = Member()
             self.current_member = User(
@@ -48,7 +49,7 @@ class Intro:
             )
             self.current_member.save()
             self.choices()
-        elif select.lower() == "S": 
+        elif select.lower() == "S":
             username = input("Username: ")
             self.current_member = self.get_member(username)
             self.choices()
@@ -58,11 +59,12 @@ class Intro:
             print("Error - Choose from the listed options")
             self.sign_in()
 
-    # Initial menu upon members signing in 
+    # Initial menu upon members signing in
     def choices(self):
         self.length = len(self.current_member.notes)
-        select = input(f"Welcome {self.current_member.first_name}! 
-        Pick an option:\n\t[C] - Create a note\n\t[L] - See notes library\n\t[Q] - Sign out\n\t[T] - Terminate my account\n\t[X] - Close app\n\t")
+        select = input(
+            f"Welcome {self.current_member.first_name}! Pick an option:\n\t[C] - Create a note\n\t[L] - See notes library\n\t[Q] - Sign out\n\t[T] - Terminate my account\n\t[X] - Close app\n\t"
+        )
         if select == "C":
             self.create_note()
         elif select == "L":
@@ -77,7 +79,7 @@ class Intro:
             print("Error - Choose from the listed options")
             self.choices()
 
-    # (C)reate note functionality 
+    # (C)reate note functionality
     def create_note(self):
         title = input("Title: ")
         body = input("Note: ")
@@ -86,46 +88,48 @@ class Intro:
         self.length = len(self.current_member.notes)
         print(f"{new_note.title} was added!")
 
-    # Sea(R)ch note functionality 
+    # Sea(R)ch note functionality
     # Part 1 - organize notes into an array with their respective id to facilitate searching
     def search_by_user(self):
         if self.length == 0:
-            print(f"{self.current_member.username}'s note libary is empty.")
-        else: 
-            print(f"{self.current_member.username}'s notes: ")
+            print(f"{self.current_member.username} note libary is empty.")
+        else:
+            print(f"{self.current_member.username} notes: ")
             notes = []
             for i, note in enumerate(self.current_member.notes):
                 notes.append({note.note_id})
-                print(f"({self.length-i})Note - 
-                Title: {note.title} - 
-                Date: {note.date}\n")
+                print(
+                    f"({self.length-i})Note - Title: {note.title} - Date: {note.date}\n"
+                )
             self.select_note(notes)
 
     # Part 2 - use the array above to find the corresponding note in the database
     def select_note(self, notes_list):
-        tagged = self.length-int(input("Choose a note by its #: "))
+        tagged = self.length - int(input("Choose a note by its #: "))
         if tagged >= 0 and tagged < self.length:
             tagged_note = Note.get(Note.note_id == notes_list[tagged])
-            print(f"\t{tagged + self.length} Note:\n\tTitle: {tagged_note.title}\n\tMessage: {tagged_note.body}\n\tDate: {tagged_note.date}\n")
-        else: 
+            print(
+                f"\t{tagged + self.length} Note:\n\tTitle: {tagged_note.title}\n\tMessage: {tagged_note.body}\n\tDate: {tagged_note.date}\n"
+            )
+        else:
             print("Error - search again")
             self.select_note(notes_list)
 
-    # Check to verify member 
+    # Check to verify member
     def get_member(self, name):
-        if member = User.get(User.username == name):
+        if member == User.get(User.username == name):
             return member
         else:
             print(f"Error - Member {name} doesn't exist.")
             self.sign_in()
 
-    # (D)elete member functionality 
+    # (D)elete member functionality
     def remove_member(self):
         response = input("Confirm termination of membership - Y/N:\n")
         if response.lower() == "Y" or "Yes":
             print(f"Member {self.current_member.username} has been terminated.")
-        self.current_member.delete_instance()
-        self.sign_in()
+            self.current_member.delete_instance()
+            self.sign_in()
         elif response.lower() == "N" or "No":
             self.choices()
         else:
@@ -136,7 +140,7 @@ class Intro:
 class Member:
     def __init__(self):
         self.first_name = input("First Name: ")
-        self.username = 
+        self.username = self.create_username()
 
     def create_username(self):
         potential_username = input("Create a username: ")
@@ -150,18 +154,26 @@ class Member:
         if taken.exists():
             print(f"{name} is not available")
             return False
-        else: 
+        else:
             return True
 
+
 # Note functionality (Note class w/ functions)
-class Note: 
+class Note:
     def __init__(self, title, body, member):
         self.title = title
         self.body = body
         self.username = member
 
     def make_note(self):
-        new_note = Note(title=self.title, body=self.body, date=date.now().strftime(), username=self.username)
+        new_note = Note(
+            title=self.title,
+            body=self.body,
+            date=date.now().strftime(),
+            username=self.username,
+        )
         new_note.save()
 
-db.connect()
+
+intro = Intro()
+intro.sign_in
