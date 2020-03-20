@@ -87,6 +87,7 @@ class Intro:
         print(f"{new_note.title} was added!")
 
     # Sea(R)ch note functionality 
+    # Part 1 - organize notes into an array with their respective id to facilitate searching
     def search_by_user(self):
         if self.length == 0:
             print(f"{self.current_member.username}'s note libary is empty.")
@@ -99,9 +100,16 @@ class Intro:
                 Title: {note.title} - 
                 Date: {note.date}\n")
             self.select_note(notes)
-            
 
-
+    # Part 2 - use the array above to find the corresponding note in the database
+    def select_note(self, notes_list):
+        tagged = self.length-int(input("Choose a note by its #: "))
+        if tagged >= 0 and tagged < self.length:
+            tagged_note = Note.get(Note.note_id == notes_list[tagged])
+            print(f"\t{tagged + self.length} Note:\n\tTitle: {tagged_note.title}\n\tMessage: {tagged_note.body}\n\tDate: {tagged_note.date}\n")
+        else: 
+            print("Error - search again")
+            self.select_note(notes_list)
 
 
 
