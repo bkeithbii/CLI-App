@@ -30,17 +30,34 @@ db.create_tables([Notes])
 db.create_tables([User])
 
 
-# Starting option to become a member and or sign in
+
 class Intro:
     def __init__(self):
         self.current_member = None
         self.length = 0
-
+    
+    # Starting option to become a member and or sign in
     def sign_in(self):
         select = input(
             "Choose a letter:\n\t[C] - Create an account\n\t[S] - Sign in\n\t[Q] - Sign out\n\t")
-        
-        
+        if select.lower() == "C":
+            new_member = Member()
+            self.current_member = User(
+                first_name=new_member.first_name, username=new_member.username
+            )
+            self.current_member.save()
+            self.choices()
+        elif select.lower() == "S": 
+            username = input("Username: ")
+            self.current_member = self.get_member(username)
+            self.choices()
+        elif select.lower() == "Q":
+            sys.exit()
+        else:
+            print("Error - Choose from the listed options")
+            self.sign_in()
+
+    
 
 
 # Member functionality (Member class w/ functions)
