@@ -72,15 +72,15 @@ class Intro:
         select = input(
             f"Welcome {self.current_member.first_name}! Pick an option:\n\t[C] - Create a note\n\t[L] - See notes library\n\t[Q] - Sign out\n\t[T] - Terminate my account\n\t[X] - Close app\n\t"
         )
-        if select == "C":
+        if select.lower() == "C".lower():
             self.create_note()
-        elif select == "L":
+        elif select.lower() == "L".lower():
             self.search_by_user()
-        elif select == "Q":
+        elif select.lower() == "Q".lower():
             self.sign_in()
-        elif select == "T":
+        elif select.lower() == "T".lower():
             self.remove_member()
-        elif select == "X":
+        elif select.lower() == "X".lower():
             sys.exit()
         else:
             print("Error - Choose from the listed options")
@@ -133,12 +133,12 @@ class Intro:
     # (D)elete member functionality
     def remove_member(self):
         response = input("Confirm termination of membership - Y/N:\n")
-        if response.lower() == "Y" or "Yes":
+        if response.lower() == "Y".lower() or "Yes".lower():
             print(
                 f"Member {self.current_member.username} has been terminated.")
             self.current_member.delete_instance()
             self.sign_in()
-        elif response.lower() == "N" or "No":
+        elif response.lower() == "N".lower() or "No".lower():
             self.choices()
         else:
             print("Error - Choose from the listed options")
