@@ -111,7 +111,7 @@ class Intro:
             print("Error - search again")
             self.select_note(notes_list)
 
-    # Check to verify user 
+    # Check to verify member 
     def get_member(self, name):
         if member = User.get(User.username == name):
             return member
@@ -119,7 +119,17 @@ class Intro:
             print(f"Error - Member {name} doesn't exist.")
             self.sign_in()
 
-
+    # (D)elete member functionality 
+    def remove_member(self):
+        response = input("Confirm termination of membership - Y/N:\n")
+        if response.lower() == "Y" or "Yes":
+            print(f"Member {self.current_member.username} has been terminated.")
+        self.current_member.delete_instance()
+        self.sign_in()
+        elif response.lower() == "N" or "No":
+            self.choices()
+        else:
+            print("Error - Choose from the listed options")
 
 
 # Member functionality (Member class w/ functions)
