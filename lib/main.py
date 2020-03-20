@@ -57,6 +57,7 @@ class Intro:
             print("Error - Choose from the listed options")
             self.sign_in()
 
+    # Initial menu upon members signing in 
     def choices(self):
         self.length = len(self.current_member.notes)
         select = input(f"Welcome {self.current_member.first_name}! 
@@ -74,6 +75,20 @@ class Intro:
         else:
             print("Error - Choose from the listed options")
             self.choices()
+
+    # Create note functionality 
+    def create_note(self):
+        title = input("Title: ")
+        body = input("Note: ")
+        new_note = Note(title, body, self.current_member.username)
+        new_note.make_note()
+        self.length = len(self.current_member.notes)
+        print(f"{new_note.title} was added!")
+
+    
+
+
+
 
 
 # Member functionality (Member class w/ functions)
