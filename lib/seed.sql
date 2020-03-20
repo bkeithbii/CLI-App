@@ -1,0 +1,2 @@
+DROP DATABASE notesapp;
+CREATE DATABASE notesapp;
