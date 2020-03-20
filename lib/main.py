@@ -17,6 +17,7 @@ class Notes(BaseModel):
     body = TextField()
     date = DateField()
     username = ForeignKeyField(User, field="username")
+    note_id = AutoField()
 
 
 # Define user model (will see if this works later)
@@ -76,7 +77,7 @@ class Intro:
             print("Error - Choose from the listed options")
             self.choices()
 
-    # Create note functionality 
+    # (C)reate note functionality 
     def create_note(self):
         title = input("Title: ")
         body = input("Note: ")
@@ -85,7 +86,16 @@ class Intro:
         self.length = len(self.current_member.notes)
         print(f"{new_note.title} was added!")
 
-    
+    # Sea(R)ch note functionality 
+    def search_by_user(self):
+        if self.length == 0:
+            print(f"{self.current_member.username}'s note libary is empty.")
+        else: 
+            print(f"{self.current_member.username}'s notes: ")
+            notes = []
+            for i, note in enumerate(self.current_member.notes):
+                notes.append({})
+
 
 
 
