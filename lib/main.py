@@ -33,9 +33,9 @@ class Notes(BaseModel):
 
 
 # Create tables for  Notes/User models
-db.drop_tables([Users])
+# db.drop_tables([Users])
 db.create_tables([Users])
-db.drop_tables([Notes])
+# db.drop_tables([Notes])
 db.create_tables([Notes])
 
 
@@ -47,20 +47,20 @@ class Intro:
     # Starting option to become a member and or sign in
     def sign_in(self):
         select = input(
-            "Choose a letter:\n\t[C] - Create an account\n\t[S] - Sign in\n\t[Q] - Sign out\n\t"
+            "Choose a letter:\n\t [C] - Create an account\n\t [S] - Sign in\n\t [Q] - Sign out\n\t: "
         )
-        if select.lower() == "C":
+        if select.lower() == "C".lower():
             new_member = Member()
             self.current_member = Users(
                 first_name=new_member.first_name, username=new_member.username
             )
             self.current_member.save()
             self.choices()
-        elif select.lower() == "S":
+        elif select.lower() == "S".lower():
             username = input("Username: ")
             self.current_member = self.get_member(username)
             self.choices()
-        elif select.lower() == "Q":
+        elif select.lower() == "Q".lower():
             sys.exit()
         else:
             print("Error - Choose from the listed options")
