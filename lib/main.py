@@ -1,5 +1,5 @@
 from peewee import *
-from datetime import date
+from datetime import datetime
 import sys
 
 db = PostgresqlDatabase(
@@ -27,8 +27,9 @@ class Users(BaseModel):
 class Notes(BaseModel):
     title = CharField(max_length=200)
     body = TextField()
-    date = DateField()
-    username = ForeignKeyField(Users, backref="notes", field="username")
+    date = CharField()
+    username = ForeignKeyField(
+        Users, backref="notes", field="username", on_delete="CASCADE")
     note_id = AutoField()
 
 
@@ -70,7 +71,7 @@ class Intro:
     def choices(self):
         self.length = len(self.current_member.notes)
         select = input(
-            f"Welcome {self.current_member.first_name}! Pick an option:\n\t[C] - Create a note\n\t[L] - See notes library\n\t[Q] - Sign out\n\t[T] - Terminate my account\n\t[X] - Close app\n\t"
+            f"Welcome {self.current_member.first_name}! Pick an option:\n\t[C] - Create a note\n\t[L] - See notes library\n\t[Q] - Sign out\n\t[T] - Terminate my account\n\t[X] - Close app\n\t: "
         )
         if select.lower() == "C".lower():
             self.create_note()
@@ -94,6 +95,7 @@ class Intro:
         new_note.make_note()
         self.length = len(self.current_member.notes)
         print(f"{new_note.title} was added!")
+        self.choices()
 
     # Sea(R)ch note functionality
     # Part 1 - organize notes into an array with their respective id to facilitate searching
@@ -114,25 +116,27 @@ class Intro:
     def select_note(self, notes_list):
         tagged = self.length - int(input("Choose a note by its #: "))
         if tagged >= 0 and tagged < self.length:
-            tagged_note = Note.get(Note.note_id == notes_list[tagged])
+            tagged_note = Notes.get(Notes.note_id == notes_list[tagged])
             print(
                 f"\t{tagged + self.length} Note:\n\tTitle: {tagged_note.title}\n\tMessage: {tagged_note.body}\n\tDate: {tagged_note.date}\n"
             )
+            self.choices()
         else:
             print("Error - search again")
             self.select_note(notes_list)
 
     # Check to verify member
     def get_member(self, name):
-        if member == Users.get(Users.username == name):
+        try:
+            member = Users.get(Users.username == name)
             return member
-        else:
+        except DoesNotExist:
             print(f"Error - Member {name} doesn't exist.")
             self.sign_in()
 
     # (D)elete member functionality
     def remove_member(self):
-        response = input("Confirm termination of membership - Y/N:\n")
+        response = input("Confirm termination of membership - Y/N: ")
         if response.lower() == "Y".lower() or "Yes".lower():
             print(
                 f"Member {self.current_member.username} has been terminated.")
@@ -174,11 +178,12 @@ class Note:
         self.username = member
 
     def make_note(self):
-        new_note = Note(
+
+        new_note = Notes(
             title=self.title,
             body=self.body,
-            date=date.now().strftime(),
-            username=self.username,
+            date=datetime.now().strftime("%c"),
+            username=self.username
         )
         new_note.save()
 
