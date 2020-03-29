@@ -1,5 +1,5 @@
 from peewee import *
-from datetime import datetime
+from datetime import date
 import sys
 
 db = PostgresqlDatabase(
@@ -140,6 +140,7 @@ class Intro:
         if response.lower() == "Y".lower() or "Yes".lower():
             print(
                 f"Member {self.current_member.username} has been terminated.")
+            self.current_member = Notes.get(Notes.username)
             self.current_member.delete_instance()
             self.sign_in()
         elif response.lower() == "N".lower() or "No".lower():
@@ -182,7 +183,7 @@ class Note:
         new_note = Notes(
             title=self.title,
             body=self.body,
-            date=datetime.now().strftime("%c"),
+            date=date.today(),
             username=self.username
         )
         new_note.save()
