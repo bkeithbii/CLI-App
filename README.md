@@ -32,6 +32,7 @@ python3 lib/main.py
 ## Future Updates
 
 - Give users the ability to delete both notes and accounts as a whole.
+- Add colors and command line graphics to spice up the CLI portion of the application/improve user experience.
 - Build a UI for the application to give the notes life.
 - Allow users to enter notes with special files such as images or links.
 
